@@ -1,0 +1,23 @@
+{
+  "name": "nodebossconfig",
+  "version": "1.0.0",
+  "description": "Use Node.js to deal with config file of boss.exe",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hei-threebody/NodeBossConfig.git"
+  },
+  "author": "Qiutum",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hei-threebody/NodeBossConfig/issues"
+  },
+  "homepage": "https://github.com/hei-threebody/NodeBossConfig#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "meow": "^5.0.0"
+  }
+}
