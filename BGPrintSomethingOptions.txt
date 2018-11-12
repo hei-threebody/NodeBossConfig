@@ -1,0 +1,30 @@
+#include "$ROOTIOROOT/share/jobOptions_ReadRec.txt"
+#include "$MAGNETICFIELDROOT/share/MagneticField.txt"
+#include "$VERTEXFITROOT/share/jobOptions_VertexDbSvc.txt"
+
+// #include "$OFFLINEEVENTLOOPMGRROOT/share/OfflineEventLoopMgr_Option.txt"
+#include "$RUNEVENTNUMBERALGROOT/share/jobOptions_RunEventNumber.txt"
+
+
+ApplicationMgr.DLLs += { "PrintSomething" };
+
+ApplicationMgr.TopAlg = { "PrintSomething" };
+
+MessageSvc.OutputLevel = 5;
+MessageSvc.useColors   = true;
+
+// ApplicationMgr.EvtSel = "NONE";
+
+PrintSomething.OutputLevel = {{OutputLevel}};
+ApplicationMgr.EvtMax = {{EvtMax}};
+
+/**********************************************************************
+*                          PrintSomethings                           *
+**********************************************************************/
+
+
+EventCnvSvc.digiRootInputFile = { {{#InputFileList}} "{{{.}}}", {{/InputFileList}} };
+ApplicationMgr.HistogramPersistency = "ROOT";
+// NTupleSvc.Output = { "FILE1 DATAFILE='./out_1/mc99.root' OPT='NEW'"};
+// NTupleSvc.Output = {"FILE1 DATAFILE='/moose/Bes3User/hzhang/boss/PrintSomething/outBG/2_9/bg.root' OPT='NEW'"};
+NTupleSvc.Output = {"FILE1 DATAFILE='{{{OutputFile}}}' OPT='NEW'"};

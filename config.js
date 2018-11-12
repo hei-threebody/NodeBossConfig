@@ -1,9 +1,6 @@
 var Mustache = require('mustache')
 var fs = require('fs');
 var path = require('path');
-var meow = require('meow');
-
-var cli = require('./cli.js');
 
 var optionTxt = fs.readFileSync('BGPrintSomethingOptions.txt', 'utf-8')
 

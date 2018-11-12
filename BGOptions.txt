@@ -1,0 +1,30 @@
+#include "$ROOTIOROOT/share/jobOptions_ReadRec.txt"
+#include "$MAGNETICFIELDROOT/share/MagneticField.txt"
+#include "$VERTEXFITROOT/share/jobOptions_VertexDbSvc.txt"
+
+// #include "$OFFLINEEVENTLOOPMGRROOT/share/OfflineEventLoopMgr_Option.txt"
+#include "$RUNEVENTNUMBERALGROOT/share/jobOptions_RunEventNumber.txt"
+
+
+ApplicationMgr.DLLs += { "PrintSomething" };
+
+ApplicationMgr.TopAlg = { "PrintSomething" };
+
+MessageSvc.OutputLevel = 5;
+MessageSvc.useColors   = true;
+
+// ApplicationMgr.EvtSel = "NONE";
+
+PrintSomething.OutputLevel = 5;
+ApplicationMgr.EvtMax = -1;
+
+/**********************************************************************
+*                          PrintSomethings                           *
+**********************************************************************/
+
+
+EventCnvSvc.digiRootInputFile = {  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_0.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_1.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_10.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_11.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_12.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_13.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_14.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_15.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_16.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_17.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_18.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_19.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_2.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_20.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_21.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_22.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_23.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_24.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_25.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_26.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_27.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_28.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_29.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_3.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_30.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_31.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_32.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_33.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_34.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_35.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_36.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_37.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_38.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_39.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_4.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_40.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_41.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_42.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_43.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_44.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_45.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_46.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_47.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_48.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_49.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_5.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_50.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_51.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_52.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_53.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_54.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_55.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_56.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_57.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_58.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_59.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_6.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_60.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_61.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_62.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_63.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_64.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_65.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_66.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_67.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_7.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_8.dst",  "/ustcfs/bes3user/2013/xial/qqbar/2.9000/rec01/qqbar_9.dst",  };
+ApplicationMgr.HistogramPersistency = "ROOT";
+// NTupleSvc.Output = { "FILE1 DATAFILE='./out_1/mc99.root' OPT='NEW'"};
+// NTupleSvc.Output = {"FILE1 DATAFILE='/moose/Bes3User/hzhang/boss/PrintSomething/outBG/2_9/bg.root' OPT='NEW'"};
+NTupleSvc.Output = {"FILE1 DATAFILE='/moose/Bes3User/hzhang/boss/PrintSomething/outBG/2.9000.root' OPT='NEW'"};

@@ -1,0 +1,1 @@
+EventCnvSvc.digiRootInputfile = { {{#InputFileList}} "{{{.}}}", {{/InputFileList}} }

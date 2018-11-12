@@ -18,6 +18,7 @@
   "homepage": "https://github.com/hei-threebody/NodeBossConfig#readme",
   "dependencies": {
     "chalk": "^2.4.1",
-    "meow": "^5.0.0"
+    "meow": "^5.0.0",
+    "mustache": "^3.0.1"
   }
 }
