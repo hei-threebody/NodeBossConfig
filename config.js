@@ -4,45 +4,39 @@ var path = require('path');
 var chalk = require('chalk');
 
 function config(input, flag) {
-	console.log(flag);
+	// console.log(flag);
 	var optionTxt = fs.readFileSync('BGPrintSomethingOptions.txt', 'utf-8')
 	var inputList = []
-	var energy = flag.energy * 10000
-	var energyStr = String(energy)[0] + '.' + String(energy).slice(1,)
-	var OutputFile = '/moose/Bes3User/hzhang/boss/PrintSomething/outBG/' + energyStr + '.root';
 
-	console.log(chalk.bold.gray('Dealing with MC background analysis'));
-	console.log(chalk.bold.gray('Dealing with ') + chalk.bold.red('Energy: ' + energyStr));
-	console.log(chalk.bold.gray('Setting log level to ') + chalk.bold.red('Level ' + (flag.log ? 5 : 1)));
+	var energyJson = JSON.parse(fs.readFileSync('energy.json', 'utf-8'));
+	var energyFiltered = energyJson.filter(e => e.energy == flag.energy)
 
-
-
-	function travel(dir, callback) {
-		fs.readdirSync(dir).forEach(function (file) {
-			var pathname = path.join(dir, file);
-
-			if (fs.statSync(pathname).isDirectory()) {
-				travel(pathname, callback);
-			} else {
-				callback(pathname);
-			}
-		});
+	// console.log(energyFiltered)
+	
+	if (energyFiltered.length == 0) {
+		console.log(chalk.bold.red('Error, bad energy'))
+		return
 	}
 
+	switch(flag.mode) {
+		case 'mc':
+		case 'bg':
+		case 'tr':
+	}
 
-	travel('/ustcfs/bes3user/2013/xial/qqbar/' + energyStr + '/rec01/', function (pathname) {
-		var reg = /dst/g;
-		if (reg.test(pathname)) {
-			inputList.push(pathname)
-		}
-	});
+	console.log(chalk.bold.gray('Dealing with MC background analysis'));
+	console.log(chalk.bold.gray('Dealing with ') + chalk.bold.red('Energy: ' + flag.energy));
+	console.log(chalk.bold.gray('Setting log level to ') + chalk.bold.red('Level ' + (flag.log ? 5 : 1)));
+
+	console.log(chalk.bold.gray('The number of dst to analysis is ') + chalk.bold.red(inputList.length));
+	// console.log(chalk.bold.gray('The file of output is ') + chalk.bold.red(OutputFile));
 
 	var output = {
 		"OutputLevel": (flag.log) ? 1 : 5,
 		"EvtMax": flag.EvtMax,
 		// inputFile: JSON.stringify(inputList)
 		"InputFileList": inputList,
-		"OutputFile": OutputFile
+		// "OutputFile": OutputFile
 	};
 
 

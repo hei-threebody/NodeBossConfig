@@ -20,17 +20,44 @@ const cli = meow(`
             alias: 'l'
         },
         energy: {
-            type: 'string',
+            type: 'int',
             default: 2.9,
             alias: 'e' 
         },
 		evtmax: {
 			type: 'int',
-			defaulte: -1,
+			default: -1,
 			alias: 'n'
+		},
+		mode: {
+			type: 'string',
+			default: 'mc',
+			alias: 'm'
+		},
+		"all-bg": {
+			type: 'boolean',
+			default: false
+		},
+		"all-mc": {
+			type: 'boolean',
+			default: false
+		},
+		"all-tr": {
+			type: 'boolean',
+			default: false
+		},
+		bg: {
+			type: 'double',
+		},
+		mc: {
+			type: 'double',
+		},
+		tr: {
+			type: 'double',
 		}
     }
 })
 
 
+// console.log(cli[0], cli.flags);
 module.exports = cli;

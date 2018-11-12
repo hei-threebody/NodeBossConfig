@@ -5,6 +5,5 @@ var meow = require('meow');
 
 var config = require('./config');
 var cli = require('./cli');
-// var Hello = require('./Hello');
 
 config(cli[0], cli.flags);
