@@ -1,4 +1,5 @@
 var meow = require('meow');
+
 const cli = meow(`
     Usage
         $ config
@@ -22,18 +23,14 @@ const cli = meow(`
             type: 'string',
             default: 2.9,
             alias: 'e' 
-        }
+        },
+		evtmax: {
+			type: 'int',
+			defaulte: -1,
+			alias: 'n'
+		}
     }
 })
 
-
-// config(cli.input[0], cli.flags);
-//
-
-function config(input, flags) {
-}
-
-console.log(cli.input[0], cli.flags);
-config(cli.flags);
 
 module.exports = cli;

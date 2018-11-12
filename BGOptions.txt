@@ -16,7 +16,7 @@ MessageSvc.useColors   = true;
 // ApplicationMgr.EvtSel = "NONE";
 
 PrintSomething.OutputLevel = 5;
-ApplicationMgr.EvtMax = -1;
+ApplicationMgr.EvtMax = ;
 
 /**********************************************************************
 *                          PrintSomethings                           *
