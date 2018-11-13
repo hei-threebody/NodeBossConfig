@@ -37,5 +37,5 @@ function trconfig(energy) {
 	}
 }
 
-console.log(trconfig(2.9))
+// console.log(trconfig(2.9))
 module.exports = trconfig
