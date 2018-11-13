@@ -27,7 +27,7 @@ function trconfig(energy) {
 		})
 	}
 	for (var i = start; i <= end; i++) {
-		// console.log(i)
+        console.log('Dealing with Run Number ' + i)
 		travelNum(i)
 	}
 	

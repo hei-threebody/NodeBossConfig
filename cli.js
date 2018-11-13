@@ -34,19 +34,11 @@ const cli = meow(`
 			default: 'mc',
 			alias: 'm'
 		},
-		"all-bg": {
-			type: 'boolean',
-			default: false
-		},
-		"all-mc": {
-			type: 'boolean',
-			default: false
-		},
-		"all-tr": {
-			type: 'boolean',
-			default: false
-		},
-		bg: {
+        all: {
+            type: 'boolean',
+            default: false
+        },
+        bg: {
 			type: 'double',
 		},
 		mc: {

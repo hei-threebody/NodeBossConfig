@@ -19,6 +19,8 @@ function config(input, flag) {
 	var energyList = energyJson.map(e => e.energy)
 
 	// console.log(energyFiltered)
+    //
+    var conf = undefined
 
 	
 	if (energyFiltered.length == 0) {
@@ -27,58 +29,71 @@ function config(input, flag) {
 	}
 
 	if (flag.all) {
-		console.log(chalk.bold.red('Warning, you are running the program on all the energy poin'))
+		console.log(chalk.bold.red('Warning, you are running the program on all the energy point'))
 		switch(flag.mode) {
 			case 'mc':
 				console.log(chalk.bold.red('mc mode on'))
 				energyList.forEach(function (energy) {
-					console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-					mcconfig(energy)	
+					// console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
+                    flag.all = false;
+                    flag.energy = energy;
+                    flag.e = energy;
+                    config(input, flag);
+				// conf = mcconfig(energy)
 				})
+                return
 			case 'bg':
-				console.log(chalk.bold.red('bc mode no'))
+				console.log(chalk.bold.red('bg mode no'))
 				energyList.forEach(function (energy) {
 					console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-					bgconfig(energy)
+                    flag.all = false;
+                    flag.energy = energy;
+                    flag.e = energy;
+                    config(input, flag);
 				})
+                return
 			case 'tr':
 				console.log(chalk.bold.red('tr mode on'))
 				energyList.forEach(function (energy) {
 					console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-					trconfig(energy)
+                    flag.all = false;
+                    flag.energy = energy;
+                    flag.e = energy;
+                    config(input, flag);
 				})
+                return
 		}
 	} else {
 		switch(flag.mode) {
 			case 'mc':
 				console.log(chalk.bold.red('mc mode on'))
 				console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-				mcconfig(energy)	
+				conf = mcconfig(energy)	
+                break
 			case 'bg':
 				console.log(chalk.bold.red('bg mode on'))
 				console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-				bgconfig(energy)	
+				conf = bgconfig(energy)	
+                break
 			case 'tr':
 				console.log(chalk.bold.red('tr mode on'))
 				console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-				trconfig(energy)	
+				conf = trconfig(energy)	
+                break
 		}
 	}
 
-
-	console.log(chalk.bold.gray('Dealing with MC background analysis'));
-	console.log(chalk.bold.gray('Dealing with ') + chalk.bold.red('Energy: ' + flag.energy));
 	console.log(chalk.bold.gray('Setting log level to ') + chalk.bold.red('Level ' + (flag.log ? 5 : 1)));
 
-	console.log(chalk.bold.gray('The number of dst to analysis is ') + chalk.bold.red(inputList.length));
+	console.log(chalk.bold.gray('The number of dst to analysis is ') + chalk.bold.red(conf.inputList.length));
 	// console.log(chalk.bold.gray('The file of output is ') + chalk.bold.red(OutputFile));
 
 	var output = {
 		"OutputLevel": (flag.log) ? 1 : 5,
 		"EvtMax": flag.EvtMax,
 		// inputFile: JSON.stringify(inputList)
-		"InputFileList": inputList,
-		// "OutputFile": OutputFile
+		"InputFileList": conf.inputList,
+        "OutputFile": conf.OutputFile
 	};
 
 
