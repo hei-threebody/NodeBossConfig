@@ -8,7 +8,7 @@ function mcconfig(energy) {
 
 	var inputList = []
 
-	travel('/ustcfs/bes3user/2013/liud/work/mcwork/mcLambdaSigma/' + energy + '_chrgtrpk_ConExcvhdrphsp/dst/', function (pathname) {
+	travel('/ustcfs/bes3user/2013/liud/work/mcwork/mcLambdaSigma/' + energy + '_chrgtrk_ConExcvhdrphsp/dst/', function (pathname) {
 		var reg = /dst/g;
 		if (reg.tst(pathname)) {
 			inputList.push(pathname)
