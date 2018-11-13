@@ -59,5 +59,5 @@ const cli = meow(`
 })
 
 
-// console.log(cli[0], cli.flags);
+console.log(cli[0], cli.flags);
 module.exports = cli;

@@ -10,12 +10,43 @@ function config(input, flag) {
 
 	var energyJson = JSON.parse(fs.readFileSync('energy.json', 'utf-8'));
 	var energyFiltered = energyJson.filter(e => e.energy == flag.energy)
+	var energyList = energyJson.map(e => e.energy)
 
 	// console.log(energyFiltered)
 	
 	if (energyFiltered.length == 0) {
 		console.log(chalk.bold.red('Error, bad energy'))
 		return
+	}
+
+	if (flag.all) {
+		console.log(chalk.bold.red('Warning, you are running the program on all the energy poin'))
+		switch(flag.mode) {
+			case 'mc':
+				console.log(chalk.bold.red('mc mode on'))
+				energyList.forEach(function (energy) {
+					console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
+					mcconfig(energy)	
+				})
+			case 'bg':
+				console.log(chalk.bold.red('bc mode no'))
+				energyList.forEach(function (energy) {
+					console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
+					bgconfig(energy)
+				})
+			case 'tr':
+				console.log(chalk.bold.red('tr mode on'))
+				energyList.forEach(function (energy) {
+					console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
+					trconfig(energy)
+				})
+		}
+	} else {
+		switch(flag.mode) {
+			case 'mc':
+			case 'bg':
+			case 'tr':
+		}
 	}
 
 	switch(flag.mode) {

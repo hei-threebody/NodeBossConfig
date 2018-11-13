@@ -14,4 +14,9 @@ function mcconfig(energy) {
 			inputList.push(pathname)
 		}
 	})
+
+	return {
+		inputList,
+		OutputFile
+	}
 }

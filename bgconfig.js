@@ -16,5 +16,10 @@ function bgconfig(energy) {
 			inputList.push(pathname)
 		}
 	})
+
+	return {
+		inputList,
+		OutputFile
+	}
 }
 
