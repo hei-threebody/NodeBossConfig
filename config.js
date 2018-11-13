@@ -3,16 +3,23 @@ var fs = require('fs');
 var path = require('path');
 var chalk = require('chalk');
 
+var mcconfig = require('./mcconfig')
+var bgconfig = require('./bgconfig')
+var trconfig = require('./trconfig')
+
 function config(input, flag) {
 	// console.log(flag);
 	var optionTxt = fs.readFileSync('BGPrintSomethingOptions.txt', 'utf-8')
 	var inputList = []
+
+	var energy = flag.energy
 
 	var energyJson = JSON.parse(fs.readFileSync('energy.json', 'utf-8'));
 	var energyFiltered = energyJson.filter(e => e.energy == flag.energy)
 	var energyList = energyJson.map(e => e.energy)
 
 	// console.log(energyFiltered)
+
 	
 	if (energyFiltered.length == 0) {
 		console.log(chalk.bold.red('Error, bad energy'))
@@ -44,16 +51,20 @@ function config(input, flag) {
 	} else {
 		switch(flag.mode) {
 			case 'mc':
+				console.log(chalk.bold.red('mc mode on'))
+				console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
+				mcconfig(energy)	
 			case 'bg':
+				console.log(chalk.bold.red('bg mode on'))
+				console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
+				bgconfig(energy)	
 			case 'tr':
+				console.log(chalk.bold.red('tr mode on'))
+				console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
+				trconfig(energy)	
 		}
 	}
 
-	switch(flag.mode) {
-		case 'mc':
-		case 'bg':
-		case 'tr':
-	}
 
 	console.log(chalk.bold.gray('Dealing with MC background analysis'));
 	console.log(chalk.bold.gray('Dealing with ') + chalk.bold.red('Energy: ' + flag.energy));

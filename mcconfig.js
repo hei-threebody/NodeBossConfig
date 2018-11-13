@@ -20,3 +20,5 @@ function mcconfig(energy) {
 		OutputFile
 	}
 }
+
+module.exports = mcconfig
