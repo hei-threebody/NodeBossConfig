@@ -20,6 +20,8 @@ function trconfig(energy) {
 		output: undefined
 	}
 
+	var sign = ora()
+
 	console.log('start: ' + start)
 	console.log('end :' + end)
 	
@@ -35,10 +37,10 @@ function trconfig(energy) {
 	}
 
 	for (var i = start; i <= end; i++) {
-		ora.start('Dealing with Run Number ' + i)
+		sign.start('Dealing with Runnig Number ' + i)
         // console.log('Dealing with Run Number ' + i)
 		travelNum(i)
-		ora.stop()
+		sign.stop()
 	}
 
 	return inOut
