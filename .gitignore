@@ -1,5 +1,5 @@
-npm-debug.log
+nm-debug.log
 node_modules
 config/*
-*.DS_Store
+.DS\_Store
 *.swp

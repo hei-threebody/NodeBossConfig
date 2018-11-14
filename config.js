@@ -85,7 +85,7 @@ function config(input, flag) {
 
 	console.log(chalk.bold.gray('Setting log level to ') + chalk.bold.red('Level ' + (flag.log ? 5 : 1)));
 
-	console.log(chalk.bold.gray('The number of dst to analysis is ') + chalk.bold.red(conf.inputList.length));
+	console.log(chalk.bold.gray('The number of dst to analysis is ') + chalk.bold.red(conf.length));
 
 	var output = {
 		"OutputLevel": (flag.log) ? 1 : 5,
