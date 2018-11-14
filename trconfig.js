@@ -1,5 +1,6 @@
 var fs = require('fs')
 var path = require('path')
+var ora = require('ora')
 
 var travel = require('./travelFolder')
 
@@ -21,7 +22,6 @@ function trconfig(energy) {
 
 	console.log('start: ' + start)
 	console.log('end :' + end)
-	// return
 	
 	function travelNum(num) {
 		travel('/ustcfs/bes3data/665p01/rscan/dst/', function (pathname) {
@@ -33,9 +33,12 @@ function trconfig(energy) {
 
 		})
 	}
+
 	for (var i = start; i <= end; i++) {
-        console.log('Dealing with Run Number ' + i)
+		ora.start('Dealing with Run Number ' + i)
+        // console.log('Dealing with Run Number ' + i)
 		travelNum(i)
+		ora.stop()
 	}
 
 	return inOut
