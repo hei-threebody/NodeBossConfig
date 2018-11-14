@@ -1,6 +1,6 @@
 var fs = require('fs')
 var path = require('path')
-var ora = require('ora')
+// var ora = require('ora')
 
 var travel = require('./travelFolder')
 
@@ -20,7 +20,7 @@ function trconfig(energy) {
 		output: undefined
 	}
 
-	var sign = ora()
+	// var sign = ora()
 
 	console.log('start: ' + start)
 	console.log('end :' + end)
@@ -37,10 +37,8 @@ function trconfig(energy) {
 	}
 
 	for (var i = start; i <= end; i++) {
-		sign.start('Dealing with Runnig Number ' + i)
-        // console.log('Dealing with Run Number ' + i)
+		console.log('Dealing with Run Number ' + i)
 		travelNum(i)
-		sign.stop()
 	}
 
 	return inOut
