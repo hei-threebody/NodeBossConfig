@@ -6,6 +6,16 @@ var travel = require('./travelAllAsync')
 var ora = require('ora')
 var chalk = require('chalk')
 
+function sleep(t) {
+	var start = new Date()
+	while (true) {
+		var end = new Date()
+		if (end.getTime() - start.getTime() > t) {
+			return
+		}
+	}
+}
+
 function trconfig(energy) {
 	var inOut = []
 
@@ -27,6 +37,7 @@ function trconfig(energy) {
 	// console.log('start: ' + start)
 	// console.log('end :' + end)
 	
+	
 	function travelNum(num, finish) {
 		travel('/ustcfs/bes3data/665p01/rscan/dst/', function (e, pathname, next) {
 			if (e !== null) {
@@ -43,7 +54,7 @@ function trconfig(energy) {
 
 	for (var i = start; i <= end; i++) {
 		// console.log('Dealing with Run Number ' + i)
-		var spin = ora('Dealing with Run Number ' + i).start()
+		var spin = ora('Dealing with Run Number ' + i + '\n').start()
 		travelNum(i, function () {
 			spin.succeed('Done with Run Number ' + i)
 		})
@@ -53,5 +64,10 @@ function trconfig(energy) {
 	
 }
 
-console.log(trconfig(2.9))
+var spin = ora('Loading')
+spin.start()
+sleep(10000)
+spin.succeed('Over')
+
+// console.log(trconfig(2.9))
 module.exports = trconfig
