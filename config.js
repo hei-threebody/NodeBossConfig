@@ -9,9 +9,7 @@ var bgconfig = require('./bgconfig')
 var trconfig = require('./trconfig')
 
 function config(input, flag) {
-	// console.log(flag);
 	var optionTxt = fs.readFileSync('BGPrintSomethingOptions.txt', 'utf-8')
-	var inputList = []
 
 	var energy = flag.energy
 
@@ -19,10 +17,7 @@ function config(input, flag) {
 	var energyFiltered = energyJson.filter(e => e.energy == flag.energy)
 	var energyList = energyJson.map(e => e.energy)
 
-	// console.log(energyFiltered)
-    //
     var conf = undefined
-
 	
 	if (energyFiltered.length == 0) {
 		console.log(chalk.bold.red('Error, bad energy'))
