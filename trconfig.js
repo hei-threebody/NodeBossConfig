@@ -4,15 +4,20 @@ var path = require('path')
 var travel = require('./travelFolder')
 
 function trconfig(energy) {
-	var inputList = []
-	var OutputFile = '/moose/Bes3User/hzhang/boss/PrintSomething/outTR/' + energy + '.root';
+	var inOut = []
 
+	var outputPrefix =  '/moose/Bes3User/hzhang/boss/PrintSomething/outTR/' + energy + '/'
 	
 	var energyJson = JSON.parse(fs.readFileSync('energy.json', 'utf-8'));
 	var energyFiltered = energyJson.filter(e => e.energy == energy)
 
 	var start = energyFiltered[0].start
 	var end = energyFiltered[0].end
+
+	var inout = {
+		input: undefined,
+		output: undefined
+	}
 
 	console.log('start: ' + start)
 	console.log('end :' + end)
@@ -21,7 +26,9 @@ function trconfig(energy) {
 	function travelNum(num) {
 		travel('/ustcfs/bes3data/665p01/rscan/dst/', function (pathname) {
 			if (pathname.search('\\.dst') != -1 && pathname.search(num) != -1) {
-				inputList.push(pathname)
+				inout.input = pathname
+				inout.output = outputPrefix + pathname.match(/([^<>/\\\|:""\*\?]+\.\w+$)/)[0]
+				inOut.push(inout)
 			}
 
 		})
@@ -30,11 +37,9 @@ function trconfig(energy) {
         console.log('Dealing with Run Number ' + i)
 		travelNum(i)
 	}
+
+	return inOut
 	
-	return {
-		inputList,
-		OutputFile
-	}
 }
 
 // console.log(trconfig(2.9))
