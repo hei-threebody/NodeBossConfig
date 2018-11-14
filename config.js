@@ -99,6 +99,7 @@ function config(input, flag) {
 		var tmpobj = tmp.fileSync();
 
 		var res = Mustache.render(optionTxt, output);
+		console.log('options.txt is ', tmpobj.name);
 		// fs.writeFileSync('BGOptions.txt', res);
 		fs.writeFileSync(tmpobj.name, res);
 	})
