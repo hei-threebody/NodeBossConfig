@@ -1,0 +1,6 @@
+universe = vanilla
+executable = echo.sh
+arguments = 9
+output = outfile9.txt
+log = outfile.log
+queue

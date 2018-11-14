@@ -85,23 +85,23 @@ function config(input, flag) {
 	}
 
 	console.log(chalk.bold.gray('Setting log level to ') + chalk.bold.red('Level ' + (flag.log ? 5 : 1)));
-	console.log(chalk.bold.gray('The number of dst to analysis is ') + chalk.bold.red(conf.length));
+    console.log(chalk.bold.gray('The number of dst to analysis is ') + chalk.bold.red(inOut.length));
 
 	inOut.forEach(function (inout) {
 		var output = {
 			"OutputLevel": (flag.log) ? 1 : 5,
 			"EvtMax": flag.EvtMax,
 			// inputFile: JSON.stringify(inputList)
-			"InputFileList": conf.input,
-			"OutputFile": conf.output
+			"InputFileList": inout.input,
+			"OutputFile": inout.output
 		};
 
-		var tmpobj = tmp.fileSync();
+        var tmpname = tmp.tmpNameSync({ template: '/home/hzhang/Run/NodeBossConfig/config/XXXXXX.txt' })
 
 		var res = Mustache.render(optionTxt, output);
-		console.log('options.txt is ', tmpobj.name);
+		console.log('options.txt is ', tmpname);
 		// fs.writeFileSync('BGOptions.txt', res);
-		fs.writeFileSync(tmpobj.name, res);
+		fs.writeFileSync(tmpname, res);
 	})
 
 }
