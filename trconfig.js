@@ -2,7 +2,9 @@ var fs = require('fs')
 var path = require('path')
 // var ora = require('ora')
 
-var travel = require('./travelFolder')
+var travel = require('./travelAllAsync')
+var ora = require('ora')
+var chalk = require('chalk')
 
 function trconfig(energy) {
 	var inOut = []
@@ -22,27 +24,34 @@ function trconfig(energy) {
 
 	// var sign = ora()
 
-	console.log('start: ' + start)
-	console.log('end :' + end)
+	// console.log('start: ' + start)
+	// console.log('end :' + end)
 	
-	function travelNum(num) {
-		travel('/ustcfs/bes3data/665p01/rscan/dst/', function (pathname) {
+	function travelNum(num, finish) {
+		travel('/ustcfs/bes3data/665p01/rscan/dst/', function (e, pathname, next) {
+			if (e !== null) {
+				console.log(e);
+			}
 			if (pathname.search('\\.dst') != -1 && pathname.search(num) != -1) {
 				inout.input = pathname
 				inout.output = outputPrefix + pathname.match(/([^<>/\\\|:""\*\?]+\.\w+$)/)[0]
 				inOut.push(inout)
 			}
-		})
+			next()
+		}, finish)
 	}
 
 	for (var i = start; i <= end; i++) {
-		console.log('Dealing with Run Number ' + i)
-		travelNum(i)
+		// console.log('Dealing with Run Number ' + i)
+		var spin = ora('Dealing with Run Number ' + i).start()
+		travelNum(i, function () {
+			spin.succeed('Done with Run Number ' + i)
+		})
 	}
 
 	return inOut
 	
 }
 
-// console.log(trconfig(2.9))
+console.log(trconfig(2.9))
 module.exports = trconfig
