@@ -32,7 +32,6 @@ function trconfig(energy) {
 				inout.output = outputPrefix + pathname.match(/([^<>/\\\|:""\*\?]+\.\w+$)/)[0]
 				inOut.push(inout)
 			}
-
 		})
 	}
 

@@ -2,6 +2,7 @@ var Mustache = require('mustache')
 var fs = require('fs');
 var path = require('path');
 var chalk = require('chalk');
+var tmp = require('tmp');
 
 var mcconfig = require('./mcconfig')
 var bgconfig = require('./bgconfig')
@@ -68,37 +69,39 @@ function config(input, flag) {
 			case 'mc':
 				console.log(chalk.bold.red('mc mode on'))
 				console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-				conf = mcconfig(energy)	
+				inOut = mcconfig(energy)	
                 break
 			case 'bg':
 				console.log(chalk.bold.red('bg mode on'))
 				console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-				conf = bgconfig(energy)	
+				inOut = bgconfig(energy)	
                 break
 			case 'tr':
 				console.log(chalk.bold.red('tr mode on'))
 				console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-				conf = trconfig(energy)	
+				inOut = trconfig(energy)	
                 break
 		}
 	}
 
 	console.log(chalk.bold.gray('Setting log level to ') + chalk.bold.red('Level ' + (flag.log ? 5 : 1)));
-
 	console.log(chalk.bold.gray('The number of dst to analysis is ') + chalk.bold.red(conf.length));
 
-	var output = {
-		"OutputLevel": (flag.log) ? 1 : 5,
-		"EvtMax": flag.EvtMax,
-		// inputFile: JSON.stringify(inputList)
-		"InputFileList": conf.input,
-        "OutputFile": conf.output
-	};
+	inOut.forEach(function (inout) {
+		var output = {
+			"OutputLevel": (flag.log) ? 1 : 5,
+			"EvtMax": flag.EvtMax,
+			// inputFile: JSON.stringify(inputList)
+			"InputFileList": conf.input,
+			"OutputFile": conf.output
+		};
 
+		var tmpobj = tmp.fileSync();
 
-	var res = Mustache.render(optionTxt, output);
-
-	fs.writeFileSync('BGOptions.txt', res);
+		var res = Mustache.render(optionTxt, output);
+		// fs.writeFileSync('BGOptions.txt', res);
+		fs.writeFileSync(tmpobj.name, res);
+	})
 
 }
 
