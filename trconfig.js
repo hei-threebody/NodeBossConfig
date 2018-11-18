@@ -56,7 +56,7 @@ function trconfig(energy) {
 	function travelNum(num) {
 		listDir('/ustcfs/bes3data/665p01/rscan/dst')
 			.then(function (data) {
-				inout.push(...data)
+				console.log(data.length)
 			})
 		}
 
