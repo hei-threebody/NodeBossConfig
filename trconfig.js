@@ -2,9 +2,11 @@ var fs = require('fs')
 var path = require('path')
 // var ora = require('ora')
 
-var travel = require('./travelAllAsync')
+// var travel = require('./travelAllAsync')
 var ora = require('ora')
 var chalk = require('chalk')
+
+var listDir = require('listDir')
 
 function sleep(t) {
 	var start = new Date()
@@ -37,20 +39,26 @@ function trconfig(energy) {
 	// console.log('start: ' + start)
 	// console.log('end :' + end)
 	
+	// function travelNum(num, finish) {
+	//     travel('/ustcfs/bes3data/665p01/rscan/dst/', function (e, pathname, next) {
+	//         if (e !== null) {
+	//             console.log(e);
+	//         }
+	//         if (pathname.search('\\.dst') != -1 && pathname.search(num) != -1) {
+	//             inout.input = pathname
+	//             inout.output = outputPrefix + pathname.match(/([^<>/\\\|:""\*\?]+\.\w+$)/)[0]
+	//             inOut.push(inout)
+	//         }
+	//         next()
+	//     }, finish)
+	// }
 	
-	function travelNum(num, finish) {
-		travel('/ustcfs/bes3data/665p01/rscan/dst/', function (e, pathname, next) {
-			if (e !== null) {
-				console.log(e);
-			}
-			if (pathname.search('\\.dst') != -1 && pathname.search(num) != -1) {
-				inout.input = pathname
-				inout.output = outputPrefix + pathname.match(/([^<>/\\\|:""\*\?]+\.\w+$)/)[0]
-				inOut.push(inout)
-			}
-			next()
-		}, finish)
-	}
+	function travelNum(num) {
+		listDir('/ustcfs/bes3data/665p01/rscan/dst')
+			.then(function (data) {
+				inout.push(...data)
+			})
+		}
 
 	for (var i = start; i <= end; i++) {
 		// console.log('Dealing with Run Number ' + i)
