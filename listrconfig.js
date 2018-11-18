@@ -101,5 +101,4 @@ function config(input, flag) {
 
 }
 
-module.exports = config;
-// console.log(config);
+module.exports = listrconfig;
