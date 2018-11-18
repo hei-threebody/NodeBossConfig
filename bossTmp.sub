@@ -1,6 +1,6 @@
 universe = vanilla
 executable = echo.sh
-arguments = 9
-output = outfile9.txt
+arguments = 167
+output = outfile167.txt
 log = outfile.log
 queue
