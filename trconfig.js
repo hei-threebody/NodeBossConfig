@@ -62,10 +62,8 @@ function trconfig(energy) {
 
 	for (var i = start; i <= end; i++) {
 		// console.log('Dealing with Run Number ' + i)
-		var spin = ora('Dealing with Run Number ' + i + '\n').start()
-		travelNum(i, function () {
-			spin.succeed('Done with Run Number ' + i)
-		})
+		// var spin = ora('Dealing with Run Number ' + i + '\n').start()
+		travelNum(i)
 	}
 
 	return inOut
