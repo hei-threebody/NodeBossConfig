@@ -6,7 +6,7 @@ var path = require('path')
 var ora = require('ora')
 var chalk = require('chalk')
 
-var listDir = require('listDir')
+var listDir = require('./readFile')
 
 function sleep(t) {
 	var start = new Date()
