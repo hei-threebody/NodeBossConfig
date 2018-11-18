@@ -64,10 +64,10 @@ function trconfig(energy) {
 	
 }
 
-var spin = ora('Loading')
-spin.start()
-sleep(10000)
-spin.succeed('Over')
-
-// console.log(trconfig(2.9))
+// var spin = ora('Loading')
+// spin.start()
+// sleep(10000)
+// spin.succeed('Over')
+//
+console.log(trconfig(2.9))
 module.exports = trconfig
