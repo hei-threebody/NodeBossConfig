@@ -3,8 +3,8 @@ var path = require('path')
 // var ora = require('ora')
 
 // var travel = require('./travelAllAsync')
-var ora = require('ora')
-var chalk = require('chalk')
+// var ora = require('ora')
+// var chalk = require('chalk')
 
 var listDir = require('./readFile')
 
@@ -53,18 +53,34 @@ function trconfig(energy) {
 	//     }, finish)
 	// }
 	
-	function travelNum(num) {
-		listDir('/ustcfs/bes3data/665p01/rscan/dst')
-			.then(function (data) {
-				console.log(data.length)
-			})
-		}
+	// function travelNum(num) {
+    //     console.log(num)
+	//     listDir('/ustcfs/bes3data/665p01/rscan/dst')
+	//         .then(function (data) {
+	//             console.log(data.length)
+	//         })
+	//     }
 
-	for (var i = start; i <= end; i++) {
+    function travelNum() {
+    console.log(start, end)
+    var list = [...Array(end - start)].map(x => x + start)
+    
+        return Promise.all(list.map(item =>
+            listDir('/ustcfs/bes3data/665p01/rscan/dst')
+        ))
+    }
+
+    travelNum().then(function() {
+        console.log('done')
+    })
+
+
+    
+	// for (var i = start; i <= end; i++) {
 		// console.log('Dealing with Run Number ' + i)
 		// var spin = ora('Dealing with Run Number ' + i + '\n').start()
-		travelNum(i)
-	}
+		// travelNum(i)
+	// }
 
 	return inOut
 	

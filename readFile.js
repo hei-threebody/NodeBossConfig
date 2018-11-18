@@ -37,8 +37,8 @@ function listDir(dir) {
     });
 }
 
-// listDir('./').then(function(data) {
-//     console.log(data)
-// })
+listDir('/ustcfs/bes3data/665p01/rscan/dst').then(function(data) {
+    console.log(data.length)
+})
 
 module.exports = listDir
