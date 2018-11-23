@@ -3,103 +3,147 @@ var fs = require('fs');
 var path = require('path');
 var chalk = require('chalk');
 var tmp = require('tmp');
+var ProgressBar = require('progress')
+
+var exec = require('child_process').exec;
 
 var mcconfig = require('./mcconfig')
 var bgconfig = require('./bgconfig')
 var trconfig = require('./trconfig')
 
+var fse = require('fs-extra')
+
+// function mk_dir(energy) {
+//     energy = String(energy)
+//     return new Promise((resolve, reject) => {
+//         fs.mkdir(energy, function () {
+//             fs.mkdir('
+
+function condor_submit(filename) {
+    function random(min, max) {
+        return min* 1000 + Math.floor((max-min) * Math.random()) * 1000
+    }
+
+    function exec_always(command, callback) {
+        exec(command, function (err, stdout, stderr) {
+            if (err) {
+                // console.log('err occcured')
+                setTimeout( function () {
+                    exec_always(command, callback)
+                } ,random(1, 10))
+            } else {
+                // console.log(stdout)
+                // console.log(stderr)
+                callback()
+            }
+        })
+    }
+
+
+    return new Promise((resolve, reject) => {
+        exec_always('condor_submit ' + filename, function () {
+            resolve()
+        })
+    })
+}
+
+function condor_sub(sub, opt, filename) {
+    tmpPrefix = '2.8/'
+    // console.log(sub.length, opt.length)
+    return new Promise((resolve, reject) => {
+        fs.writeFile(tmpPrefix + filename + '.sub', sub, function () {
+            // console.log(sub.length)
+            fs.writeFile(tmpPrefix + filename + '.txt', opt, function () {
+                // console.log(opt.length, filename)
+                resolve(tmpPrefix + filename + '.sub')
+            })
+        })
+    })
+}
+
+function check_log_folder(energy, mode) {
+    mode = mode.toUppecCase()
+
+    fs.
+}
+    
+
+
 function config(input, flag) {
-	var optionTxt = fs.readFileSync('BGPrintSomethingOptions.txt', 'utf-8')
+    
+    var optionTxt = fs.readFileSync('BGPrintSomethingOptions.txt', 'utf-8')
+    var subTxt = fs.readFileSync('boss.sub', 'utf-8')
 
-	var energy = flag.energy
+    var energy = flag.energy
 
-	var energyJson = JSON.parse(fs.readFileSync('energy.json', 'utf-8'));
-	var energyFiltered = energyJson.filter(e => e.energy == flag.energy)
-	var energyList = energyJson.map(e => e.energy)
+    var energyJson = JSON.parse(fs.readFileSync('energy.json', 'utf-8'));
+    var energyFiltered = energyJson.filter(e => e.energy == flag.energy)
+    var energyList = energyJson.map(e => e.energy)
 
     var conf = undefined
-	
-	if (energyFiltered.length == 0) {
-		// console.log(chalk.bold.red('Error, bad energy'))
-		return
-	}
 
-	if (flag.all) {
-		// console.log(chalk.bold.red('Warning, you are running the program on all the energy point'))
-		switch(flag.mode) {
-			case 'mc':
-				// console.log(chalk.bold.red('mc mode on'))
-				energyList.forEach(function (energy) {
-					// console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-                    flag.all = false;
-                    flag.energy = energy;
-                    flag.e = energy;
-                    config(input, flag);
-				// conf = mcconfig(energy)
-				})
-                return
-			case 'bg':
-				// console.log(chalk.bold.red('bg mode no'))
-				energyList.forEach(function (energy) {
-					// console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-                    flag.all = false;
-                    flag.energy = energy;
-                    flag.e = energy;
-                    config(input, flag);
-				})
-                return
-			case 'tr':
-				// console.log(chalk.bold.red('tr mode on'))
-				energyList.forEach(function (energy) {
-					// console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-                    flag.all = false;
-                    flag.energy = energy;
-                    flag.e = energy;
-                    config(input, flag);
-				})
-                return
-		}
-	} else {
-		switch(flag.mode) {
-			case 'mc':
-				// console.log(chalk.bold.red('mc mode on'))
-				// console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-				inOut = mcconfig(energy)	
-                break
-			case 'bg':
-				// console.log(chalk.bold.red('bg mode on'))
-				// console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-				inOut = bgconfig(energy)	
-                break
-			case 'tr':
-				// console.log(chalk.bold.red('tr mode on'))
-				// console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-				inOut = trconfig(energy)	
-                break
-		}
-	}
+    if (energyFiltered.length == 0) {
+        // console.log(chalk.bold.red('Error, bad energy'))
+        return
+    }
 
-	// console.log(chalk.bold.gray('Setting log level to ') + chalk.bold.red('Level ' + (flag.log ? 5 : 1)));
-    // console.log(chalk.bold.gray('The number of dst to analysis is ') + chalk.bold.red(inOut.length));
+    switch(flag.mode) {
+        case 'mc':
+            // console.log(chalk.bold.red('mc mode on'))
+            // console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
+            inOut = mcconfig(energy)	
+            break
+        case 'bg':
+            // console.log(chalk.bold.red('bg mode on'))
+            // console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
+            inOut = bgconfig(energy)	
+            break
+        case 'tr':
+            // console.log(chalk.bold.red('tr mode on'))
+            // console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
+            inOut = trconfig(energy)	
+            break
+    }
 
-	inOut.forEach(function (inout) {
-		var output = {
-			"OutputLevel": (flag.log) ? 1 : 5,
-			"EvtMax": flag.EvtMax,
-			// inputFile: JSON.stringify(inputList)
-			"InputFileList": inout.input,
-			"OutputFile": inout.output
-		};
 
-        var tmpname = tmp.tmpNameSync({ template: '/home/hzhang/Run/NodeBossConfig/config/XXXXXX.txt' })
+    trconfig(energy).then(function (data) {
+        var inOut = data
+        var inOutBar = new ProgressBar('[:bar] :perent :current of :total', {total: inOut.length})
+        inOut.forEach(function (inout) {
+            var output = {
+                "OutputLevel": (flag.log) ? 1 : 5,
+                "EvtMax": flag.evtmax,
+                // inputFile: JSON.stringify(inputList)
+                "InputFileList": inout.input,
+                "OutputFile": inout.output + '.root'
+            };
 
-		var res = Mustache.render(optionTxt, output);
-		console.log('options.txt is ', tmpname);
-		// fs.writeFileSync('BGOptions.txt', res);
-		fs.writeFileSync(tmpname, res);
-	})
+            output_s = inout.output.replace(/\//g, '_')
+
+            var output_sub = {
+                "argu": output_s + '.txt',
+                "output": output_s
+            }
+
+            // var tmpname = tmp.tmpNameSync({ template: '/home/hzhang/Run/NodeBossConfig/config/XXXXXX.txt' })
+
+            var res_txt = Mustache.render(optionTxt, output);
+            var res_sub = Mustache.render(subTxt, output_sub);
+
+            // console.log(res_txt, res_sub)
+            condor_sub(res_sub, res_txt, output_s).then(function (data) {
+                // console.log(data)
+                // inOutBar.tick()
+                condor_submit(data).then(function () {
+                    inOutBar.tick()
+                })
+            })
+            // console.log(output_s)
+
+            // // fs.writeFileSync('tmp/' + inout.output.replace(/\//g, '_') + '.txt', res);
+        })
+    })
 
 }
 
 module.exports = config;
-// console.log(config);

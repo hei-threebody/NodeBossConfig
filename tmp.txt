@@ -15,16 +15,16 @@ MessageSvc.useColors   = true;
 
 // ApplicationMgr.EvtSel = "NONE";
 
-PrintSomething.OutputLevel = {{OutputLevel}};
-ApplicationMgr.EvtMax = {{EvtMax}};
+PrintSomething.OutputLevel = 5;
+ApplicationMgr.EvtMax = ;
 
 /**********************************************************************
 *                          PrintSomethings                           *
 **********************************************************************/
 
 
-EventCnvSvc.digiRootInputFile = { {{#InputFileList}} "{{{.}}}" {{/InputFileList}} };
+EventCnvSvc.digiRootInputFile = {  "/ustcfs/bes3data/665p01/rscan/dst/150122/run_0039867_All_file014_SFO-1.dst",  };
 ApplicationMgr.HistogramPersistency = "ROOT";
 // NTupleSvc.Output = { "FILE1 DATAFILE='./out_1/mc99.root' OPT='NEW'"};
 // NTupleSvc.Output = {"FILE1 DATAFILE='/moose/Bes3User/hzhang/boss/PrintSomething/outBG/2_9/bg.root' OPT='NEW'"};
-NTupleSvc.Output = {"FILE1 DATAFILE='{{{OutputFile}}}' OPT='NEW'"};
+NTupleSvc.Output = {"FILE1 DATAFILE='/moose/Bes3User/hzhang/boss/PrintSomething/outTR/2.9/run_0039867_All_file014_SFO-1.root' OPT='NEW'"};

@@ -1,5 +1,6 @@
 var fs = require('fs')
 var path = require('path')
+var ProgressBar = require('progress') 
 // var ora = require('ora')
 
 // var travel = require('./travelAllAsync')
@@ -9,87 +10,88 @@ var path = require('path')
 var listDir = require('./readFile')
 
 function sleep(t) {
-	var start = new Date()
-	while (true) {
-		var end = new Date()
-		if (end.getTime() - start.getTime() > t) {
-			return
-		}
-	}
+    var start = new Date()
+    while (true) {
+        var end = new Date()
+        if (end.getTime() - start.getTime() > t) {
+            return
+        }
+    }
 }
 
 function trconfig(energy) {
-	var inOut = []
+    var inOut = []
 
-	var outputPrefix =  '/moose/Bes3User/hzhang/boss/PrintSomething/outTR/' + energy + '/'
-	
-	var energyJson = JSON.parse(fs.readFileSync('energy.json', 'utf-8'));
-	var energyFiltered = energyJson.filter(e => e.energy == energy)
+    var outputPrefix =  '/moose/Bes3User/hzhang/boss/PrintSomething/outTR/' + energy + '/'
 
-	var start = energyFiltered[0].start
-	var end = energyFiltered[0].end
+    var energyJson = JSON.parse(fs.readFileSync('energy.json', 'utf-8'));
+    var energyFiltered = energyJson.filter(e => e.energy == energy)
 
-	var inout = {
-		input: undefined,
-		output: undefined
-	}
+    var start = energyFiltered[0].start
+    var end = energyFiltered[0].end
 
-	// var sign = ora()
-
-	// console.log('start: ' + start)
-	// console.log('end :' + end)
-	
-	// function travelNum(num, finish) {
-	//     travel('/ustcfs/bes3data/665p01/rscan/dst/', function (e, pathname, next) {
-	//         if (e !== null) {
-	//             console.log(e);
-	//         }
-	//         if (pathname.search('\\.dst') != -1 && pathname.search(num) != -1) {
-	//             inout.input = pathname
-	//             inout.output = outputPrefix + pathname.match(/([^<>/\\\|:""\*\?]+\.\w+$)/)[0]
-	//             inOut.push(inout)
-	//         }
-	//         next()
-	//     }, finish)
-	// }
-	
-	// function travelNum(num) {
-    //     console.log(num)
-	//     listDir('/ustcfs/bes3data/665p01/rscan/dst')
-	//         .then(function (data) {
-	//             console.log(data.length)
-	//         })
-	//     }
-
-    function travelNum() {
-    console.log(start, end)
-    var list = [...Array(end - start)].map(x => x + start)
-    
-        return Promise.all(list.map(item =>
-            listDir('/ustcfs/bes3data/665p01/rscan/dst')
-        ))
+    var inout = {
+        input: undefined,
+        output: undefined
     }
 
-    travelNum().then(function() {
-        console.log('done')
+    console.log(start, end)
+
+    // console.log('start: ' + start)
+    // console.log('end :' + end)
+    // function travelNum(num) {
+    //     console.log(num)
+    //     listDir('/ustcfs/bes3data/665p01/rscan/dst')
+    //         .then(function (data) {
+    //             console.log(data.length)
+    //         })
+    //     }
+
+    var bar = new ProgressBar('[:bar] :percent :current of :total', { total: end - start + 1 })
+
+    // function travelPromise() {
+    return new Promise((resolve, reject) => {
+
+        (function travelNum(num) {
+            if (num < end) {
+                listDir('/ustcfs/bes3data/665p01/rscan/dst').then(function(data) {
+                    bar.tick()
+
+                    filted = data.filter(function (x) {
+                        return (x.search('\\.dst') != -1 && x.search(num) != -1)
+                    })
+                    inOutPart = filted.map(function (x) {
+                        return ({input: x, output: outputPrefix + x.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1]})
+                    })
+                    inOut.push(...inOutPart)
+                    travelNum(num + 1)
+                })
+            } else {
+                // console.log('done')
+                // console.log("inOut.length: " + inOut.length)
+                resolve(inOut)
+            }
+        })(start)
+
     })
-
-
-    
-	// for (var i = start; i <= end; i++) {
-		// console.log('Dealing with Run Number ' + i)
-		// var spin = ora('Dealing with Run Number ' + i + '\n').start()
-		// travelNum(i)
-	// }
-
-	return inOut
-	
 }
+
+// travelPromise().then(function () {
+//     console.log(inOut)
+//     console.log('all done')
+// })
+//
+// }
 
 // var spin = ora('Loading')
 // spin.start()
 // sleep(10000)
 // spin.succeed('Over')
 //
-console.log(trconfig(2.9))
+// trconfig(2.9).then(function (data) {
+//     data.forEach(function (item) {
+//         item.output = item.output.replace(/\//, '_')
+//     })
+//     console.log(data)
+// })
 module.exports = trconfig
