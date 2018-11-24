@@ -1,16 +1,15 @@
-arguments = /home/hzhang/Run/NodeBossConfig/tmp/{{{argu}}}
-output    = {{{output}}}.log
-log       = outfile.log
-universe  = vanilla
+arguments               = {{{argu}}}
+output                  = {{{output}}}
+log                     = outfile.log
+universe                = vanilla
 GetEnv                  = True
 executable              = /software/BES/bes6.6.5.p01/dist/6.6.5.p01/InstallArea/x86_64-slc6-gcc46-opt/bin/boss.exe
-# arguments               = /home/hzhang/Run/NodeBossConfig/_moose_Bes3User_hzhang_boss_PrintSomething_outTR_2.9_run_0039867_All_file002_SFO-1.txt
-# output                  = /home/hzhang/Run/NodeBossConfig/_moose_Bes3User_hzhang_boss_PrintSomething_outTR_2.9_run_0039867_All_file002_SFO-1.log
 log                     = /home/hzhang/Run/NodeBossConfig/outfile.log
 error                   = outfile.err
 should_transfer_files   = YES
 +Group                  = "BESIII"
-# transfer_input_files    = "/software/BES/bes6.6.5.p01/gaudi/GAUDI_v23r9/InstallArea/x86_64-slc6-gcc46-opt/lib/libGaudiKernel.so"
 when_to_transfer_output = ON_EXIT_OR_EVICT
-# Environment             = "LD_LIBRARY_PATH=""."""
 queue
+
+# transfer_input_files  = "/software/BES/bes6.6.5.p01/gaudi/GAUDI_v23r9/InstallArea/x86_64-slc6-gcc46-opt/lib/libGaudiKernel.so"
+# Environment           = "LD_LIBRARY_PATH                                                                                                       = ""."""
