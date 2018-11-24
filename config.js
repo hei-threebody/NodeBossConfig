@@ -99,8 +99,8 @@ function config(input, flag) {
 		function exec_always(command, callback) {
 			exec(command, function (err, stdout, stderr) {
 				if (err) {
-                    console.log(err)
-					return callback()
+                    // console.log(err)
+					// return callback()
                     // console.log('err occcured')
 					setTimeout( function () {
 						exec_always(command, callback)
@@ -150,15 +150,16 @@ function config(input, flag) {
 					"output": logDir + '/' +  inoutStr + '.log'
 				}
 
-				console.log('OutputRoot is: ' + output.OutputFile)
-				console.log('OutputLog is: ' + output_sub.output)
-				console.log('InputOption is: ' + output_sub.argu)
+				// console.log('OutputRoot is: ' + output.OutputFile)
+				// console.log('OutputLog is: ' + output_sub.output)
+				// console.log('InputOption is: ' + output_sub.argu)
 
 				var res_txt = Mustache.render(optionTxt, output);
 				var res_sub = Mustache.render(subTxt, output_sub);
 
 				condor_sub(res_sub, res_txt)
 				.then( (data) => {
+					console.log(data)
 					return condor_submit(data)
 				})
 				.then( () => {
