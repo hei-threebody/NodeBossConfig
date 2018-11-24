@@ -45,12 +45,12 @@ function config(input, flag) {
 		})
 	}
 
-	function condor_sub(sub, opt, filename) {
+	function condor_sub(sub, opt) {
 		// console.log(sub.length, opt.length)
 		return new Promise((resolve, reject) => {
-			fs.writeFile(filename + '.sub', sub, function () {
+			fs.writeFile( logStr + '/' + inoutStr + '.sub', sub, function () {
 				// console.log(sub.length)
-				fs.writeFile(filename + '.txt', opt, function () {
+				fs.writeFile(output_sub.argu, opt, function () {
 					// console.log(opt.length, filename)
 					resolve(filename + '.sub')
 				})
@@ -144,9 +144,8 @@ function config(input, flag) {
 
 				var output_sub = {
 					"argu": configDir + '/' + inoutStr + '.txt',
-					"output":outputDir + '/' +  inoutStr
+					"output": logDir + '/' +  inoutStr + '.log'
 				}
-
 
 				var res_txt = Mustache.render(optionTxt, output);
 				var res_sub = Mustache.render(subTxt, output_sub);
