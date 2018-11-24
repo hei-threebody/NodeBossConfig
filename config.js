@@ -124,13 +124,14 @@ function config(input, flag) {
 	}
 
 	function condor_sub() {
+		var subDir =logDir + '/' + inoutStr + '.sub'
 		// console.log(sub.length, opt.length)
 		return new Promise((resolve, reject) => {
-			fs.writeFile( logDir + '/' + inoutStr + '.sub', res_sub, function () {
+			fs.writeFile(subDir , res_sub, function () {
 				// console.log(sub.length)
 				fs.writeFile(output_sub.argu, res_txt, function () {
 					// console.log(opt.length, filename)
-					resolve( logDir + '/' + inoutStr + '.sub' )
+					resolve(subDir)
 				})
 			})
 		})
@@ -159,7 +160,7 @@ function config(input, flag) {
 
 				condor_sub(res_sub, res_txt)
 				.then( (data) => {
-					console.log(data)
+					// console.log(data)
 					return condor_submit(data)
 				})
 				.then( () => {
