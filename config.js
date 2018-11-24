@@ -52,7 +52,7 @@ function config(input, flag) {
 				// console.log(sub.length)
 				fs.writeFile(output_sub.argu, opt, function () {
 					// console.log(opt.length, filename)
-					resolve(filename + '.sub')
+					resolve( logDir + '/' + inoutStr + '.sub' )
 				})
 			})
 		})
@@ -97,6 +97,7 @@ function config(input, flag) {
 	var energyList = energyJson.map(e => e.energy)
 
 	var conf = undefined
+	var output_sub = undefined
 
 	if (energyFiltered.length == 0) {
 		console.log(chalk.bold.red('Error, bad energy'))
@@ -142,7 +143,7 @@ function config(input, flag) {
 					"OutputFile": outputDir + '/' + inoutStr + '.root'
 				};
 
-				var output_sub = {
+				output_sub = {
 					"argu": configDir + '/' + inoutStr + '.txt',
 					"output": logDir + '/' +  inoutStr + '.log'
 				}
