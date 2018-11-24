@@ -22,7 +22,8 @@ function config(input, flag) {
 		function exec_always(command, callback) {
 			exec(command, function (err, stdout, stderr) {
 				if (err) {
-					// console.log('err occcured')
+                    console.log(err)
+                    // console.log('err occcured')
 					setTimeout( function () {
 						exec_always(command, callback)
 					} ,random(1, 10))
@@ -45,34 +46,39 @@ function config(input, flag) {
 	}
 
 	function condor_sub(sub, opt, filename) {
-		tmpPrefix = '2.8/'
 		// console.log(sub.length, opt.length)
 		return new Promise((resolve, reject) => {
-			fs.writeFile(tmpPrefix + filename + '.sub', sub, function () {
+			fs.writeFile(filename + '.sub', sub, function () {
 				// console.log(sub.length)
-				fs.writeFile(tmpPrefix + filename + '.txt', opt, function () {
+				fs.writeFile(filename + '.txt', opt, function () {
 					// console.log(opt.length, filename)
-					resolve(tmpPrefix + filename + '.sub')
+					resolve(filename + '.sub')
 				})
 			})
 		})
 	}
 
 	function check_log_folder(energy, mode) {
+
+        configDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '/' + String(energy)
+        logDir = '/moose/Bes3user/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '/' + String(energy)
 		return new Promise((resolve, reject) => {
-			console.log('make config dir')
-			fse.ensureDir('/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '/' + String(energy))
+			console.log('make config dir ' + chalk.bold.red(configDir))
+			fse.ensureDir(configDir)
 				.then( () => {
-					console.log('make log dir')
-					fse.ensureDir('/moose/Bes3user/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '/' + String(energy))
+					console.log('make log dir ' + chalk.bold.red(logDir))
+					fse.ensureDir(logDir)
 				})
 				.then( () => {
-					console.log('make output dir')
+					// console.log('make output dir ' + chalk.bold)
 					resolve()
 				})
 		})
 	}
 
+    var outputDir = undefined
+    var logDir = undefined
+    var configDir = undefined
 
 	var optionTxt = fs.readFileSync('BGPrintSomethingOptions.txt', 'utf-8')
 	var subTxt = fs.readFileSync('boss.sub', 'utf-8')
@@ -111,10 +117,13 @@ function config(input, flag) {
 
 	check_log_folder(energy, flag.mode)
 		.then( () => {
-			conf(energy)
+			return conf(energy)
 		})
 		.then(function (data) {
+            // console.log(data)
 			var inOut = data
+            console.log(inOut.length)
+            console.log(inOut)
 			var inOutBar = new ProgressBar('[:bar] :perent :current of :total', {total: inOut.length})
 			inOut.forEach(function (inout) {
 				var output = {
@@ -128,8 +137,8 @@ function config(input, flag) {
 				output_s = inout.output.replace(/\//g, '_')
 
 				var output_sub = {
-					"argu": output_s + '.txt',
-					"output": output_s
+					"argu": configDir + '/' + output_s + '.txt',
+					"output":outputDir + '/' +  output_s
 				}
 
 				// var tmpname = tmp.tmpNameSync({ template: '/home/hzhang/Run/NodeBossConfig/config/XXXXXX.txt' })
@@ -138,12 +147,12 @@ function config(input, flag) {
 				var res_sub = Mustache.render(subTxt, output_sub);
 
 				// console.log(res_txt, res_sub)
-				condor_sub(res_sub, res_txt, output_s).then(function (data) {
+				condor_sub(res_sub, res_txt).then(function (data) {
 					// console.log(data)
 					// inOutBar.tick()
-					condor_submit(data).then(function () {
+                    condor_submit(data).then(function () {
 						inOutBar.tick()
-					})
+                    })
 				})
 				// // fs.writeFileSync('tmp/' + inout.output.replace(/\//g, '_') + '.txt', res);
 			})

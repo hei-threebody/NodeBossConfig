@@ -1,8 +1,9 @@
 var fs = require('fs')
 var path = require('path')
 
-travel = require('./travelFolder')
+var listDir = require('./readFile')
 function mcconfig(energy) {
+
 
     var outputPrefix =  '/moose/Bes3User/hzhang/boss/PrintSomething/outMC/' + energy + '/'
 
@@ -23,6 +24,8 @@ function mcconfig(energy) {
             inOut = filted.map(function (x) {
                 return ({input: x, output: outputPrefix + x.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1]})
             })
+            // console.log(inOut)
+            resolve(inOut)
         })
     })
 
