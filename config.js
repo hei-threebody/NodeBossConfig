@@ -14,49 +14,7 @@ var trconfig = require('./trconfig')
 var fse = require('fs-extra')
 
 function config(input, flag) {
-	function condor_submit(filename) {
-		function random(min, max) {
-			return min* 1000 + Math.floor((max-min) * Math.random()) * 1000
-		}
 
-		function exec_always(command, callback) {
-			exec(command, function (err, stdout, stderr) {
-				if (err) {
-                    console.log(err)
-                    // console.log('err occcured')
-					setTimeout( function () {
-						exec_always(command, callback)
-					} ,random(1, 10))
-				} else {
-					// console.log(stdout)
-					// console.log(stderr)
-					callback()
-				}
-			})
-		}
-
-
-		return new Promise((resolve, reject) => {
-			setTimeout( function () {
-				exec_always('condor_submit ' + filename, function () {
-					resolve()
-				})
-			} , random(1, 100))
-		})
-	}
-
-	function condor_sub(sub, opt) {
-		// console.log(sub.length, opt.length)
-		return new Promise((resolve, reject) => {
-			fs.writeFile( logDir + '/' + inoutStr + '.sub', sub, function () {
-				// console.log(sub.length)
-				fs.writeFile(output_sub.argu, opt, function () {
-					// console.log(opt.length, filename)
-					resolve( logDir + '/' + inoutStr + '.sub' )
-				})
-			})
-		})
-	}
 
 	function check_log_folder(energy, mode) {
 
@@ -97,7 +55,6 @@ function config(input, flag) {
 	var energyList = energyJson.map(e => e.energy)
 
 	var conf = undefined
-	var output_sub = undefined
 
 	if (energyFiltered.length == 0) {
 		console.log(chalk.bold.red('Error, bad energy'))
@@ -134,7 +91,50 @@ function config(input, flag) {
 			var inOutBar = new ProgressBar('[:bar] :perent :current of :total', {total: inOut.length})
 			inOut.forEach(function (inout) {
 				// console.log(inout)
-				// inoutStr = inout.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1].replace(/\//g, '_')
+		function condor_submit(filename) {
+		function random(min, max) {
+			return min* 1000 + Math.floor((max-min) * Math.random()) * 1000
+		}
+
+		function exec_always(command, callback) {
+			exec(command, function (err, stdout, stderr) {
+				if (err) {
+                    console.log(err)
+					return callback()
+                    // console.log('err occcured')
+					setTimeout( function () {
+						exec_always(command, callback)
+					} ,random(1, 10))
+				} else {
+					// console.log(stdout)
+					// console.log(stderr)
+					callback()
+				}
+			})
+		}
+
+
+		return new Promise((resolve, reject) => {
+			setTimeout( function () {
+				exec_always('condor_submit ' + filename, function () {
+					resolve()
+				})
+			} , random(1, 100))
+		})
+	}
+
+	function condor_sub() {
+		// console.log(sub.length, opt.length)
+		return new Promise((resolve, reject) => {
+			fs.writeFile( logDir + '/' + inoutStr + '.sub', res_sub, function () {
+				// console.log(sub.length)
+				fs.writeFile(output_sub.argu, res_txt, function () {
+					// console.log(opt.length, filename)
+					resolve( logDir + '/' + inoutStr + '.sub' )
+				})
+			})
+		})
+	}			// inoutStr = inout.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1].replace(/\//g, '_')
 				inoutStr = inout.replace(/\//g, '_').replace(/\.dst$/g, '')
 
 				var output = {
@@ -145,11 +145,10 @@ function config(input, flag) {
 					"OutputFile": outputDir + '/' + inoutStr + '.root'
 				};
 
-				output_sub = {
+				var output_sub = {
 					"argu": configDir + '/' + inoutStr + '.txt',
 					"output": logDir + '/' +  inoutStr + '.log'
 				}
-
 
 				console.log('OutputRoot is: ' + output.OutputFile)
 				console.log('OutputLog is: ' + output_sub.output)
