@@ -133,7 +133,9 @@ function config(input, flag) {
             // console.log(inOut)
 			var inOutBar = new ProgressBar('[:bar] :perent :current of :total', {total: inOut.length})
 			inOut.forEach(function (inout) {
-				inoutStr = inout.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1].replace(/\//g, '_')
+				// console.log(inout)
+				// inoutStr = inout.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1].replace(/\//g, '_')
+				inoutStr = inout.replace(/\//g, '_').replace(/\.dst$/g, '')
 
 				var output = {
 					"OutputLevel": (flag.log) ? 1 : 5,
@@ -147,6 +149,11 @@ function config(input, flag) {
 					"argu": configDir + '/' + inoutStr + '.txt',
 					"output": logDir + '/' +  inoutStr + '.log'
 				}
+
+
+				console.log('OutputRoot is: ' + output.OutputFile)
+				console.log('OutputLog is: ' + output_sub.output)
+				console.log('InputOption is: ' + output_sub.argu)
 
 				var res_txt = Mustache.render(optionTxt, output);
 				var res_sub = Mustache.render(subTxt, output_sub);
