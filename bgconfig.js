@@ -14,12 +14,9 @@ function bgconfig(energy) {
                 return (x.search('\\.dst') != -1)
             })
 
-            // inOut = filted.map(function (x) {
-            //     return ({input: x, output: outputPrefix + x.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1]})
-            // })
+        resolve(inOut)
         })
 
-        resolev(inOut)
     })
 }
 
