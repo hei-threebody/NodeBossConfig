@@ -73,11 +73,11 @@ function config(input, flag) {
 					return fse.ensureDir(logDir)
 				})
 				.then( () => {
-					console.log('make output dir ' + chalk.bold)
-					return fse.ensureDir(ouputDir)
+					console.log('make output dir ' + chalk.bold.red(outputDir))
+					return fse.ensureDir(outputDir)
 				})
 				.then( () => {
-					resoleve()
+					resolve()
 				})
 		})
 
