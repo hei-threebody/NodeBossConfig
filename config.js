@@ -48,7 +48,7 @@ function config(input, flag) {
 	function condor_sub(sub, opt) {
 		// console.log(sub.length, opt.length)
 		return new Promise((resolve, reject) => {
-			fs.writeFile( logStr + '/' + inoutStr + '.sub', sub, function () {
+			fs.writeFile( logDir + '/' + inoutStr + '.sub', sub, function () {
 				// console.log(sub.length)
 				fs.writeFile(output_sub.argu, opt, function () {
 					// console.log(opt.length, filename)
