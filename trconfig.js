@@ -22,18 +22,11 @@ function sleep(t) {
 function trconfig(energy) {
     var inOut = []
 
-    var outputPrefix =  '/moose/Bes3User/hzhang/boss/PrintSomething/outTR/' + energy + '/'
-
     var energyJson = JSON.parse(fs.readFileSync('energy.json', 'utf-8'));
     var energyFiltered = energyJson.filter(e => e.energy == energy)
 
     var start = energyFiltered[0].start
     var end = energyFiltered[0].end
-
-    var inout = {
-        input: undefined,
-        output: undefined
-    }
 
     console.log(start, end)
 
@@ -60,10 +53,10 @@ function trconfig(energy) {
                     filted = data.filter(function (x) {
                         return (x.search('\\.dst') != -1 && x.search(num) != -1)
                     })
-                    inOutPart = filted.map(function (x) {
-                        return ({input: x, output: outputPrefix + x.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1]})
-                    })
-                    inOut.push(...inOutPart)
+                    // inOutPart = filted.map(function (x) {
+                    //     return ({input: x, output: outputPrefix + x.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1]})
+                    // })
+                    inOut.push(...filted)
                     travelNum(num + 1)
                 })
             } else {

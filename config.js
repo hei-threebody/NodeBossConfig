@@ -60,20 +60,27 @@ function config(input, flag) {
 
 	function check_log_folder(energy, mode) {
 
-        configDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '/' + String(energy)
-        logDir = '/moose/Bes3user/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '/' + String(energy)
+        configDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '_CONF' + '/' + String(energy)
+        logDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '_LOG' + '/' + String(energy)
+		outputDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '/' + String(energy)
+
 		return new Promise((resolve, reject) => {
-			console.log('make config dir ' + chalk.bold.red(configDir))
+			console.log('Make config dir ' + chalk.bold.red(configDir))
+
 			fse.ensureDir(configDir)
 				.then( () => {
-					console.log('make log dir ' + chalk.bold.red(logDir))
-					fse.ensureDir(logDir)
+					console.log('Make log dir ' + chalk.bold.red(logDir))
+					return fse.ensureDir(logDir)
 				})
 				.then( () => {
-					// console.log('make output dir ' + chalk.bold)
-					resolve()
+					console.log('make output dir ' + chalk.bold)
+					return fse.ensureDir(ouputDir)
+				})
+				.then( () => {
+					resoleve()
 				})
 		})
+
 	}
 
     var outputDir = undefined
@@ -92,7 +99,7 @@ function config(input, flag) {
 	var conf = undefined
 
 	if (energyFiltered.length == 0) {
-		// console.log(chalk.bold.red('Error, bad energy'))
+		console.log(chalk.bold.red('Error, bad energy'))
 		return
 	}
 
@@ -100,20 +107,19 @@ function config(input, flag) {
 	switch(flag.mode) {
 		case 'mc':
 			console.log(chalk.bold.red('mc mode on'))
-			console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
 			conf = mcconfig
 			break
 		case 'bg':
 			console.log(chalk.bold.red('bg mode on'))
-			console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
 			conf = bgconfig
 			break
 		case 'tr':
 			console.log(chalk.bold.red('tr mode on'))
-			console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
 			conf = trconfig
 			break
 	}
+
+	console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
 
 	check_log_folder(energy, flag.mode)
 		.then( () => {
@@ -123,38 +129,35 @@ function config(input, flag) {
             // console.log(data)
 			var inOut = data
             console.log(inOut.length)
-            console.log(inOut)
+            // console.log(inOut)
 			var inOutBar = new ProgressBar('[:bar] :perent :current of :total', {total: inOut.length})
 			inOut.forEach(function (inout) {
+				inoutStr = inout.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1].replace(/\//g, '_')
+
 				var output = {
 					"OutputLevel": (flag.log) ? 1 : 5,
 					"EvtMax": flag.evtmax,
 					// inputFile: JSON.stringify(inputList)
-					"InputFileList": inout.input,
-					"OutputFile": inout.output + '.root'
+					"InputFileList": inout,
+					"OutputFile": outputDir + '/' + inoutStr + '.root'
 				};
 
-				output_s = inout.output.replace(/\//g, '_')
-
 				var output_sub = {
-					"argu": configDir + '/' + output_s + '.txt',
-					"output":outputDir + '/' +  output_s
+					"argu": configDir + '/' + inoutStr + '.txt',
+					"output":outputDir + '/' +  inoutStr
 				}
 
-				// var tmpname = tmp.tmpNameSync({ template: '/home/hzhang/Run/NodeBossConfig/config/XXXXXX.txt' })
 
 				var res_txt = Mustache.render(optionTxt, output);
 				var res_sub = Mustache.render(subTxt, output_sub);
 
-				// console.log(res_txt, res_sub)
-				condor_sub(res_sub, res_txt).then(function (data) {
-					// console.log(data)
-					// inOutBar.tick()
-                    condor_submit(data).then(function () {
-						inOutBar.tick()
-                    })
+				condor_sub(res_sub, res_txt)
+				.then( (data) => {
+					return condor_submit(data)
 				})
-				// // fs.writeFileSync('tmp/' + inout.output.replace(/\//g, '_') + '.txt', res);
+				.then( () => {
+					inOutBar.tick()
+				})
 			})
 		})
 
