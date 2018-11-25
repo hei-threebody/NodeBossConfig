@@ -95,15 +95,16 @@ function config(input, flag) {
 	function confall() {
 
 		var inOut = []
+			return confenergy(energy)
 		if (flag.all) {
 			console.log(chalk.bold.red('You choose all mode'))
 
 			return new Promise((resolve, reject) => {
 
 				(function travelEnergy(energyNum) {
-					console.log(energyNum)
+					// console.log(energyNum)
 					if (energyNum < energyList.length) {
-						console.log(energyList.length)
+						// console.log(energyList.length)
 						confenergy(energyList[energyNum])
 						.then(function(data) {
 							inOut.push(...data)
@@ -158,11 +159,11 @@ function config(input, flag) {
 
 
 					return new Promise((resolve, reject) => {
-						setTimeout( function () {
+						// setTimeout( function () {
 							exec_always('condor_submit ' + filename, function () {
 								resolve()
 							})
-						} , random(1, 100))
+						// } , random(1, 100))
 					})
 				}
 
@@ -179,6 +180,7 @@ function config(input, flag) {
 						})
 					})
 				}			// inoutStr = inout.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1].replace(/\//g, '_')
+
 				inoutStr = inout.replace(/\//g, '_').replace(/\.dst$/g, '')
 
 				var output = {
