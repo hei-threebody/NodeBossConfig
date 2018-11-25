@@ -20,11 +20,10 @@ function config(input, flag) {
 
 		configDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '_CONF' + '/' + String(energy)
 		logDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '_LOG' + '/' + String(energy)
-		outputDir = '/moose/Bes5User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '/' + String(energy)
+		outputDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() +'/' + String(energy)
 
 		return new Promise((resolve, reject) => {
 			console.log('Make config dir ' + chalk.bold.red(configDir))
-
 			fse.ensureDir(configDir)
 				.then( () => {
 					console.log('Make log dir ' + chalk.bold.red(logDir))
