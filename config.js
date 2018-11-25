@@ -83,12 +83,12 @@ function config(input, flag) {
 
 	function confenergy(energy) {
 	console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
-			return new Promise ((resolve, reject) => {
+			// return new Promise ((resolve, reject) => {
 				return check_log_folder(energy, flag.mode)
 				.then( () => {
 					return conf(energy)
 				})
-			})
+			// })
 	}
 
 
@@ -102,7 +102,9 @@ function config(input, flag) {
 			return new Promise((resolve, reject) => {
 
 				(function travelEnergy(energyNum) {
+					console.log(energyNum)
 					if (energyNum < energyList.length) {
+						console.log(energyList.length)
 						confenergy(energyList[energyNum])
 						.then(function(data) {
 							inOut.push(...data)
@@ -111,7 +113,7 @@ function config(input, flag) {
 					} else {
 						resolve(inOut)
 					}
-				})(0)
+				})(1)
 
 			});
 		} else {
