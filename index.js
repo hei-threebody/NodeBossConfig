@@ -6,4 +6,8 @@ var meow = require('meow');
 var config = require('./config');
 var cli = require('./cli');
 
+
+// if (cli.flags.all) {
+//         j
+
 config(cli[0], cli.flags);

@@ -10,17 +10,17 @@ var exec = require('child_process').exec;
 var mcconfig = require('./mcconfig')
 var bgconfig = require('./bgconfig')
 var trconfig = require('./trconfig')
+var csconfig = require('./csconfig')
 
 var fse = require('fs-extra')
 
 function config(input, flag) {
 
-
 	function check_log_folder(energy, mode) {
 
-        configDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '_CONF' + '/' + String(energy)
-        logDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '_LOG' + '/' + String(energy)
-		outputDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '/' + String(energy)
+		configDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '_CONF' + '/' + String(energy)
+		logDir = '/moose/Bes3User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '_LOG' + '/' + String(energy)
+		outputDir = '/moose/Bes5User/hzhang/boss/PrintSomething/out' + mode.toUpperCase() + '/' + String(energy)
 
 		return new Promise((resolve, reject) => {
 			console.log('Make config dir ' + chalk.bold.red(configDir))
@@ -41,9 +41,9 @@ function config(input, flag) {
 
 	}
 
-    var outputDir = undefined
-    var logDir = undefined
-    var configDir = undefined
+	var outputDir = undefined
+	var logDir = undefined
+	var configDir = undefined
 
 	var optionTxt = fs.readFileSync('BGPrintSomethingOptions.txt', 'utf-8')
 	var subTxt = fs.readFileSync('boss.sub', 'utf-8')
@@ -75,67 +75,109 @@ function config(input, flag) {
 			console.log(chalk.bold.red('tr mode on'))
 			conf = trconfig
 			break
+		case 'cs':
+			console.log(chalk.bold.red('cs mode on'))
+			conf = csconfig
+			break
 	}
 
+	function confenergy(energy) {
 	console.log(chalk.bold.gray('Dealing With Energy ') + chalk.bold.red(energy))
+			return new Promise ((resolve, reject) => {
+				return check_log_folder(energy, flag.mode)
+				.then( () => {
+					return conf(energy)
+				})
+			})
+	}
 
-	check_log_folder(energy, flag.mode)
-		.then( () => {
-			return conf(energy)
-		})
+
+
+	function confall() {
+
+		var inOut = []
+		if (flag.all) {
+			console.log(chalk.bold.red('You choose all mode'))
+
+			return new Promise((resolve, reject) => {
+
+				(function travelEnergy(energyNum) {
+					if (energyNum < energyList.length) {
+						confenergy(energyList[energyNum])
+						.then(function(data) {
+							inOut.push(...data)
+							travelEnergy(energyNum + 1)
+						})
+					} else {
+						resolve(inOut)
+					}
+				})(0)
+
+			});
+		} else {
+			return confenergy(energy)
+		}
+	}
+
+
+	// check_log_folder(energy, flag.mode)
+	//     .then( () => {
+	//         return conf(energy)
+	//     })
+		confall()
 		.then(function (data) {
-            // console.log(data)
+			// console.log(data)
 			var inOut = data
-            console.log(inOut.length)
-            // console.log(inOut)
+			console.log(inOut.length)
+			// console.log(inOut)
 			var inOutBar = new ProgressBar('[:bar] :perent :current of :total', {total: inOut.length})
 			inOut.forEach(function (inout) {
 				// console.log(inout)
-		function condor_submit(filename) {
-		function random(min, max) {
-			return min* 1000 + Math.floor((max-min) * Math.random()) * 1000
-		}
+				function condor_submit(filename) {
+					function random(min, max) {
+						return min* 1000 + Math.floor((max-min) * Math.random()) * 1000
+					}
 
-		function exec_always(command, callback) {
-			exec(command, function (err, stdout, stderr) {
-				if (err) {
-                    // console.log(err)
-					// return callback()
-                    // console.log('err occcured')
-					setTimeout( function () {
-						exec_always(command, callback)
-					} ,random(1, 10))
-				} else {
-					// console.log(stdout)
-					// console.log(stderr)
-					callback()
+					function exec_always(command, callback) {
+						exec(command, function (err, stdout, stderr) {
+							if (err) {
+								// console.log(err)
+								// return callback()
+								// console.log('err occcured')
+								setTimeout( function () {
+									exec_always(command, callback)
+								} ,random(1, 10))
+							} else {
+								// console.log(stdout)
+								// console.log(stderr)
+								callback()
+							}
+						})
+					}
+
+
+					return new Promise((resolve, reject) => {
+						setTimeout( function () {
+							exec_always('condor_submit ' + filename, function () {
+								resolve()
+							})
+						} , random(1, 100))
+					})
 				}
-			})
-		}
 
-
-		return new Promise((resolve, reject) => {
-			setTimeout( function () {
-				exec_always('condor_submit ' + filename, function () {
-					resolve()
-				})
-			} , random(1, 100))
-		})
-	}
-
-	function condor_sub() {
-		var subDir =logDir + '/' + inoutStr + '.sub'
-		// console.log(sub.length, opt.length)
-		return new Promise((resolve, reject) => {
-			fs.writeFile(subDir , res_sub, function () {
-				// console.log(sub.length)
-				fs.writeFile(output_sub.argu, res_txt, function () {
-					// console.log(opt.length, filename)
-					resolve(subDir)
-				})
-			})
-		})
-	}			// inoutStr = inout.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1].replace(/\//g, '_')
+				function condor_sub() {
+					var subDir =logDir + '/' + inoutStr + '.sub'
+					// console.log(sub.length, opt.length)
+					return new Promise((resolve, reject) => {
+						fs.writeFile(subDir , res_sub, function () {
+							// console.log(sub.length)
+							fs.writeFile(output_sub.argu, res_txt, function () {
+								// console.log(opt.length, filename)
+								resolve(subDir)
+							})
+						})
+					})
+				}			// inoutStr = inout.match(/([^<>/\\\|:""\*\?]+)\.\w+$/)[1].replace(/\//g, '_')
 				inoutStr = inout.replace(/\//g, '_').replace(/\.dst$/g, '')
 
 				var output = {
@@ -159,13 +201,13 @@ function config(input, flag) {
 				var res_sub = Mustache.render(subTxt, output_sub);
 
 				condor_sub(res_sub, res_txt)
-				.then( (data) => {
-					// console.log(data)
-					return condor_submit(data)
-				})
-				.then( () => {
-					inOutBar.tick()
-				})
+					.then( (data) => {
+						// console.log(data)
+						return condor_submit(data)
+					})
+					.then( () => {
+						inOutBar.tick()
+					})
 			})
 		})
 
